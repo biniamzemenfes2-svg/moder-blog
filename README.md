@@ -1,4 +1,4 @@
-# Flask Blog Website
+# PERSONAL Blog Website
 
 A dynamic blog website built with **Python and Flask**, allowing users to register, log in, read blog posts, and leave comments. The website also provides administrative functionality for creating, editing, and managing blog posts.
 
