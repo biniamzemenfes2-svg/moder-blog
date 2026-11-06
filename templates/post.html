@@ -1,4 +1,4 @@
-{% include "header.html" %}
+{% include "header.html" %} {% from "bootstrap5/form.html" import render_form %}
 
 <!-- Page Header-->
 <header class="masthead" style="background-image: url('{{post.img_url}}')">
@@ -10,7 +10,7 @@
           <h2 class="subheading">{{ post.subtitle }}</h2>
           <span class="meta"
             >Posted by
-            <a href="#">{{ post.author }}</a>
+            <a href="#">{{ post.author.name }}</a>
             on {{ post.date }}
           </span>
         </div>
@@ -25,14 +25,44 @@
     <div class="row gx-4 gx-lg-5 justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-7">
         {{ post.body|safe }}
+        <!--TODO: Only show Edit Post button if user id is 1 (admin user) -->
+        {% if current_user.id == 1 and current_user.is_authenticated %}
 
         <div class="d-flex justify-content-end mb-4">
-          <!-- TODO: Editing posts-->
           <a
             class="btn btn-primary float-right"
-            href="{{ url_for('edit_post', post_id=post.id)}}"
+            href="{{url_for('edit_post', post_id=post.id)}}"
             >Edit Post</a
           >
+        </div>
+        {% endif %}
+
+        <!-- Comments Area -->
+        <!-- TODO: Add a CKEditor for commenting below -->
+        {{ render_form(comment) }}
+
+        <div class="comment">
+          <!-- TODO: Show all the comments on a post -->
+
+          <ul class="commentList">
+            {% for comment in post.comments %}
+
+            <li>
+              <div class="commenterImage">
+                <img
+                  src="{{ url_for('static', filename='assets/img/default-profile.jpg') }}"
+                />
+              </div>
+
+              <div class="commentText">
+                <p>{{ comment.text|safe }}</p>
+
+                <span class="date sub-text"> {{ comment.author.name }} </span>
+              </div>
+            </li>
+
+            {% endfor %}
+          </ul>
         </div>
       </div>
     </div>

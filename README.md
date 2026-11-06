@@ -1,176 +1,166 @@
-# moder-blog
+# Flask Blog Website
 
-# 📝 Personal Blog Website
+A dynamic blog website built with **Python and Flask**, allowing users to register, log in, read blog posts, and leave comments. The website also provides administrative functionality for creating, editing, and managing blog posts.
 
-A dynamic and responsive blog web application built with **Python and Flask**. The application allows users to create, read, edit, and delete blog posts through a clean and user-friendly interface.
+## Features
 
-This project demonstrates practical skills in Flask web development, database management, form validation, and CRUD operations.
+- **User Authentication**
+  - User registration and login.
+  - Secure password hashing.
+  - User logout and session management.
 
-## 🚀 Features
+- **Blog Management**
+  - Display all published blog posts.
+  - View individual blog posts.
+  - Create new blog posts.
+  - Edit existing posts.
+  - Restrict post management to the administrator.
 
-- **Create Blog Posts:** Publish articles with a title, subtitle, author, image URL, and body content.
-- **View All Posts:** Display published articles on the homepage.
-- **Read Individual Posts:** Open and read the full content of a blog post.
-- **Edit Posts:** Update existing blog articles.
-- **Delete Posts:** Remove unwanted blog posts.
-- **Rich-Text Editing:** Write and format articles using CKEditor.
-- **Form Validation:** Validate required fields and image URLs.
-- **Responsive Design:** Use Bootstrap 5 for a mobile-friendly interface.
-- **Database Storage:** Store blog posts using SQLite and Flask-SQLAlchemy.
+- **Comment System**
+  - Authenticated users can leave comments.
+  - Display comments under individual blog posts.
+  - Associate comments with their authors and blog posts.
 
-## 🛠️ Technologies Used
+- **User Interface**
+  - Responsive design using Bootstrap 5.
+  - Rich-text editing with Flask-CKEditor.
+  - Profile images using Flask-Gravatar.
 
-| Technology        | Purpose                        |
-| ----------------- | ------------------------------ |
-| Python            | Backend programming            |
-| Flask             | Web application framework      |
-| Flask-SQLAlchemy  | Database integration and ORM   |
-| SQLite            | Database storage               |
-| Flask-WTF         | Form handling and validation   |
-| Flask-Bootstrap 5 | Responsive UI components       |
-| CKEditor          | Rich-text content editing      |
-| HTML5 and CSS3    | Web page structure and styling |
+## Technologies Used
 
-## 📂 Project Structure
+| Technology       | Purpose                      |
+| ---------------- | ---------------------------- |
+| Python           | Backend programming          |
+| Flask            | Web framework                |
+| Flask-SQLAlchemy | Database management          |
+| SQLite           | Database                     |
+| Flask-Login      | User authentication          |
+| Flask-WTF        | Form handling and validation |
+| Flask-Bootstrap5 | Responsive styling           |
+| Flask-CKEditor   | Rich-text editing            |
+| Werkzeug         | Password hashing             |
+| Jinja2           | HTML templating              |
+
+## Project Structure
 
 ```text
-blog-capstone/
-├── main.py
+blog-website/
+│
+├── app.py
+├── forms.py
 ├── requirements.txt
-├── instance/
-│   └── posts.db
+│
+├── templates/
+│   ├── index.html
+│   ├── post.html
+│   ├── login.html
+│   ├── register.html
+│   ├── make-post.html
+│   ├── header.html
+│   └── footer.html
+│
 ├── static/
-│   └── assets/
-│       └── img/
-└── templates/
-    ├── index.html
-    ├── post.html
-    ├── make-post.html
-    ├── about.html
-    ├── contact.html
-    ├── header.html
-    └── footer.html
+│   ├── assets/
+│   ├── css/
+│   ├── js/
+│   └── img/
+│
+└── instance/
+    └── posts.db
 ```
 
-_Note: The exact database location and file structure may differ depending on your configuration._
+_The structure above is illustrative. Adjust filenames and folders to match your actual project._
 
-## ⚙️ Installation and Setup
+## Installation and Setup
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone YOUR_REPOSITORY_URL
 cd YOUR_PROJECT_FOLDER
 ```
 
-Replace the placeholder URL and folder name with your actual repository details.
-
-### 2. Create a virtual environment
+### 2. Create a Virtual Environment
 
 ```bash
 python3 -m venv .venv
 ```
 
-Activate it on macOS or Linux:
+Activate it:
+
+**macOS / Linux**
 
 ```bash
 source .venv/bin/activate
 ```
 
-On Windows:
+**Windows**
 
 ```bash
 .venv\Scripts\activate
 ```
 
-### 3. Install dependencies
-
-If you have a `requirements.txt` file:
+### 3. Install Dependencies
 
 ```bash
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
-Otherwise, install the main packages:
+### 4. Configure the Application
 
-```bash
-python -m pip install Flask bootstrap-flask Flask-SQLAlchemy Flask-WTF Flask-CKEditor
+Set your Flask secret key in the application configuration. For a real deployment, use an environment variable rather than committing secrets to GitHub.
+
+### 5. Initialize the Database
+
+If your application uses `db.create_all()`, initialize the database within the Flask application context:
+
+```python
+with app.app_context():
+    db.create_all()
 ```
 
-### 4. Run the application
+### 6. Run the Application
 
 ```bash
-python main.py
+python app.py
 ```
 
 Open your browser and visit:
 
-http://127.0.0.1:5003
+```text
+http://127.0.0.1:5000/
+```
 
-## 🗄️ Database Model
+## Database Models
 
-The application uses a `BlogPost` model with the following fields:
+The application uses SQLAlchemy models to manage its data.
 
-| Field      | Description                   |
-| ---------- | ----------------------------- |
-| `id`       | Unique post identifier        |
-| `title`    | Blog post title               |
-| `subtitle` | Short description of the post |
-| `author`   | Name of the author            |
-| `date`     | Publication date              |
-| `body`     | Main article content          |
-| `img_url`  | URL of the post's image       |
+- **User:** Stores registered users and their authentication information.
+- **BlogPost:** Stores blog post information, including title, subtitle, body, image URL, and author.
+- **Comment:** Stores comments associated with users and blog posts.
 
-The database tables are created automatically when the application starts.
+The models use SQLAlchemy relationships to connect users, posts, and comments.
 
-## 🔄 Application Routes
+## Security
 
-| Route                    | Method    | Description              |
-| ------------------------ | --------- | ------------------------ |
-| `/`                      | GET       | Display all blog posts   |
-| `/post/<post_id>`        | GET       | View an individual post  |
-| `/new_post`              | GET, POST | Create a new post        |
-| `/edit_post/<post_id>`   | GET, POST | Edit an existing post    |
-| `/delete_post/<post_id>` | POST      | Delete a post            |
-| `/about`                 | GET       | Display the About page   |
-| `/contact`               | GET       | Display the Contact page |
+- Passwords are stored as secure hashes rather than plain text.
+- Flask-Login manages authenticated user sessions.
+- Administrative routes are protected from unauthorized access.
+- Flask-WTF supports form validation and CSRF protection.
 
-## 📚 What I Learned
+## Future Improvements
 
-Building this project helped me practice:
-
-- Developing web applications with Flask.
-- Defining database models using SQLAlchemy.
-- Implementing create, read, update, and delete operations.
-- Handling and validating forms with Flask-WTF.
-- Integrating a rich-text editor.
-- Using Jinja2 templates and template inheritance.
-- Building responsive pages with Bootstrap 5.
-- Managing routes and HTTP methods.
-
-## 🔐 Security Notes
-
-- Keep your Flask secret key private and use an environment variable in production.
-- Protect form submissions with CSRF validation.
-- Sanitize rich-text HTML before rendering user-submitted content.
-- Use POST requests for destructive actions such as deleting posts.
-- Add authentication and authorization before allowing multiple users to manage posts.
-
-## 🌱 Future Improvements
-
-- User registration and login.
-- Categories and tags for blog posts.
-- Search and pagination.
-- Comments and likes.
-- Image uploads.
+- User profile management.
+- Search and filter blog posts.
+- Pagination for blog posts.
+- Categories and tags.
+- Improved comment moderation.
 - Deployment to a production hosting platform.
 
-## 👨‍💻 Author
+## Author
 
-**Biniam Zemenfes**
-
-Software Engineering Student | Python & Flask Developer
+Developed as part of my journey in learning **Python, Flask, SQLAlchemy, and full-stack web development**.
 
 ---
 
-_Built as a hands-on project to strengthen my backend and full-stack web development skills._
+⭐ If you find this project useful, consider giving the repository a star!
